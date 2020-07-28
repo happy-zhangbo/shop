@@ -7,9 +7,8 @@
 				<block slot="right">
 					<view>
 						<text class="cuIcon-dianhua padding-lr" style="font-size: 40upx;"></text>
-						<text class="cuIcon-searchlist padding-lr" style="font-size: 50upx;"></text>
+						<!-- <text class="cuIcon-searchlist padding-lr" style="font-size: 50upx;"></text> -->
 					</view>
-					
 				</block>
 			</cu-custom>
 		</view>
@@ -34,7 +33,7 @@
 			<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation :scroll-top="verticalNavTop" style="height:calc(100vh - 375upx);">
 				<view class="cu-item" :class="index==typeTabCur?'text-red cur':''" v-for="(item,index) in listType" :key="index" @tap="TabSelect"
 				 :data-id="index">
-					商品分类{{ item.name }}
+					商品分类
 				</view>
 			</scroll-view>
 			<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375upx)"
@@ -42,7 +41,7 @@
 				<view class="padding-top padding-lr" v-for="(item,index) in listType" :key="index" :id="'main-'+index">
 					<view class="cu-bar solid-bottom bg-white">
 						<view class="action">
-							<text class="cuIcon-title text-red"></text> 分类标题</view>
+							<text class="cuIcon-title text-red"></text> 分类标题 {{ item.name }}</view>
 					</view>
 					
 					<view class="cu-list">
@@ -99,8 +98,8 @@
 				tabTopCur: 0,
 				scrollLeft: 0,
 				listType: [],
-				typeTabCur: 0,
-				mainCur: 0,
+				typeTabCur: 10,
+				mainCur: 10,
 				verticalNavTop: 0,
 				load: true,
 				StatusBar: this.StatusBar,
@@ -119,7 +118,7 @@
 				list[i].id = i;
 			}
 			this.listType = list;
-			this.listCur = list[0];
+			this.listCur = list[10];
 		},
 		onReady() {
 			uni.hideLoading()
@@ -158,7 +157,6 @@
 					if (scrollTop > this.listType[i].top && scrollTop < this.listType[i].bottom) {
 						this.verticalNavTop = (this.listType[i].id - 1) * 50
 						this.typeTabCur = this.listType[i].id
-						console.log(scrollTop)
 						return false
 					}
 				}

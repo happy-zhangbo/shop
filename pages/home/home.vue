@@ -4,9 +4,9 @@
 		<view class="padding bg-gradual-pink top" :style="[{paddingTop:StatusBar+20+'px'}]">
 			<!-- 搜索-->
 			<view class="cu-bar search" style="min-height: 0px;">
-				<view class="search-form round">
-					<text class="cuIcon-search"></text>
-					<input :adjust-position="false" type="text" placeholder="搜索" confirm-type="search"></input>
+				<view class="search-form round" @tap="toSearch">
+					<text class="cuIcon-search">关键词搜索</text>
+					<!-- <input :adjust-position="false" type="text" placeholder="搜索" confirm-type="search" @tap="toSearch"></input> -->
 				</view>
 				<view class="action">
 					<view @tap="toRegion">
@@ -44,7 +44,7 @@
 		</view>
 		<!-- 轮播 -->
 		<view :style="[{paddingTop:CustomBar+68+'px'}]">
-			<view class="zaiui-swiper-box padding-tb bg-white">
+			<view class="zaiui-swiper-box padding-tb-sm bg-white">
 				<swiper class="screen-swiper square-dot" autoplay circular indicator-dots>
 					<swiper-item v-for="(item,index) in swiperList" :key="index">
 						<view class="padding-lr">
@@ -53,8 +53,8 @@
 					</swiper-item>
 				</swiper>
 			</view>
-			<view class="cu-list grid col-5 no-border margin-bottom-sm">
-				<view class="cu-item" v-for="(item,index) in 10" :key="index">
+			<view class="cu-list grid col-3 no-border margin-bottom-sm">
+				<view class="cu-item" v-for="(item,index) in 6" :key="index" :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]">
 					<view class="cuIcon-cardboardfill text-black"></view>
 					<text class="text-light">二级分类</text>
 				</view>
@@ -74,17 +74,17 @@
 				</view>
 			</view>
 			<view class="grid col-2">
-				<view v-for="(item,index) in 5" :key="index" @tap="toShop">
-					<view class="cu-card">
+				<view v-for="(item,index) in 5" :key="index" @tap="toShop" >
+					<view class="cu-card" :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]">
 						<view class="cu-item shadow" style="margin: 6px;">
 							<view>
 								<image :src="swiperList[index].url" mode="aspectFill" style="height: 130px;"/>
 							</view>
 							<view class="padding-sm">
-								<view class="text-bold margin-bottom-sm">商铺名称商铺名称商铺名称商铺名称</view>
+								<view class="text-bold text-lg margin-bottom-sm">商铺名称商铺名称商铺名称商铺名称</view>
 								<view class="margin-bottom-sm text-grey text-light">主营一行简介</view>
-								<view class="text-gray">
-									<text class="cuIcon-locationfill text-sm text-light">距离您2.3km</text>
+								<view class="text-gray text-sm">
+									<text class="cuIcon-locationfill text-light">距离您2.3km</text>
 								</view>
 							</view>
 						</view>
@@ -172,7 +172,13 @@
 				uni.navigateTo({
 					url:"/pages/home/region"
 				})
+			},
+			toSearch(){
+				uni.navigateTo({
+					url:"/pages/home/search"
+				})
 			}
+			
 		}
 	}
 </script>

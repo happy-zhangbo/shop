@@ -111,6 +111,14 @@
             "path" : "pages/home/region",
             "style" : {}
         }
+        ,{
+            "path" : "pages/home/search",
+            "style" : {}
+        }
+        ,{
+            "path" : "pages/home/search-result",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"mp-alipay": {
