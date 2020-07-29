@@ -5,14 +5,13 @@
 			<!-- 搜索-->
 			<view class="cu-bar search" style="min-height: 0px;">
 				<view class="search-form round" @tap="toSearch">
-					<text class="cuIcon-search">关键词搜索</text>
+					<text class="cuIcon-search"></text>关键词搜索
 					<!-- <input :adjust-position="false" type="text" placeholder="搜索" confirm-type="search" @tap="toSearch"></input> -->
 				</view>
 				<view class="action">
 					<view @tap="toRegion">
 						北京市<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
 					</view>
-					
 				</view>
 			</view>
 			<!-- 一级分类-->
