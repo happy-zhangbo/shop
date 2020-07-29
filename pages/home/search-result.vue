@@ -61,7 +61,6 @@
 		},
 		methods: {
 			scroll: function(e) {
-				console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
 			toShop(){

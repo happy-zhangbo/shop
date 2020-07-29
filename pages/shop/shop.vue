@@ -109,7 +109,6 @@
 				//this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			scroll: function(e) {
-				console.log(e)
 				this.old.scrollTop = e.detail.scrollTop
 			},
 			toShop(){

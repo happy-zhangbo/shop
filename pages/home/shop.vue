@@ -53,7 +53,7 @@
 								<view class="text-red text-xl flex justify-between">
 									<view><text class="text-sm">￥</text>64</view>
 									<view>
-										<button class="cu-btn round sm bg-black">查看规格</button>
+										<button class="cu-btn round sm bg-black" @tap.stop="show_specs">查看规格</button>
 									</view>
 								</view>
 							</view>
@@ -63,8 +63,8 @@
 			</scroll-view>
 		</view>
 		<view v-if="tabTopCur == 1">
-			<view class="cu-list menu" :class="[menuBorder?'sm-border':'',menuCard?'card-menu margin-top':'']">
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+			<view class="cu-list menu">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-location text-black"></text>
 						<text class="text-black text-light">北京市朝阳区九鼎建材市场</text>
@@ -78,13 +78,43 @@
 						</view>
 					</view>
 				</view>
-				<view class="cu-item" :class="menuArrow?'arrow':''">
+				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-time text-black text-light"></text>
 						<text class="text-black text-light">营业时间：09:00 ~ 22:00</text>
 					</view>
 				</view>
-				
+				<view class="cu-item">
+					<view class="content">
+						<text class="cuIcon-dianhua text-black text-light"></text>
+						<text class="text-black text-light">联系方式：18010091016</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="cu-modal" :class="showSpecsModel?'show':''">
+			<view class="cu-dialog">
+				<view class="cu-bar bg-white justify-end">
+					<view class="content">所有规格</view>
+					<view class="action" @tap="hideModal">
+						<text class="cuIcon-close text-red"></text>
+					</view>
+				</view>
+				<view class="padding-tb-sm bg-white">
+					<view class="flex margin-bottom-sm text-bold">
+						<view class="basis-sm">规格名称</view>
+						<view class="basis-sm">价格</view>
+					</view>
+					<scroll-view scroll-y="true" style="height: 300px;">
+						<view class="flex margin-bottom-sm text-light" v-for="(item,index) in specs" :key="index">
+							<view class="basis-sm">名称{{ index }}</view>
+							<view class="basis-sm text-red text-lg"><text class="text-sm">￥</text>123</view>
+						</view>
+					</scroll-view>
+				</view>
+				<!-- <view class="cu-bar bg-white">
+					<view class="action margin-0 flex-sub text-black solid-left" @tap="hideModal">关闭</view>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -104,6 +134,49 @@
 				load: true,
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
+				showSpecsModel:false,
+				specs:[
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称",
+					"名称"
+				]
 			}
 		},
 		onLoad() {
@@ -165,6 +238,12 @@
 				uni.navigateTo({
 					url:"/pages/home/product"
 				})
+			},
+			show_specs(){
+				this.showSpecsModel = true;
+			},
+			hideModal(){
+				this.showSpecsModel = false;
 			}
 		},
 	}
