@@ -25,9 +25,9 @@
 				<view class="flex text-white">
 					<view class="basis-xxl">
 						<scroll-view scroll-x class="nav z" scroll-with-animation :scroll-left="scrollLeft">
-							<block v-for="(item,index) in 10" :key="index">
-								<view class="cu-item" :class="index==TabCur?'select':''" @tap="tabSelect" :data-id="index">
-									<view class="text-light">一级分类</view>
+							<block v-for="(item,index) in oneClass" :key="index">
+								<view class="cu-item" :class="index==TabCur?'select':''" @tap="tabSelect" :data-id="id">
+									<view class="text-light">{{ item.name }}</view>
 									<view class="tab-dot bg-white"/>
 								</view>
 							</block>
@@ -96,6 +96,7 @@
 </template>
 
 <script>
+	import { getList } from '@/api/content/home'
 	export default {
 		data() {
 			return {
@@ -136,10 +137,16 @@
 				dotStyle: false,
 				towerStart: 0,
 				direction: '',
+				oneClass:[]
 			}
 		},
 		created() {
-			
+			var that = this;
+			getList(1,10,null).then(res => {
+				that.oneClass = res.data;
+			}).catch(err => {
+				console.log(err);
+			})
 		},
 		methods: {
 			style() {

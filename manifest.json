@@ -1,6 +1,6 @@
 {
     "name" : "shop",
-    "appid" : "",
+    "appid" : "__UNI__1E9BCBF",
     "description" : "",
     "versionName" : "ColorUi for UniApp 2.1.4",
     "versionCode" : 214,
@@ -48,7 +48,7 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "",
+        "appid" : "wx5858d70768af43aa",
         "setting" : {
             "urlCheck" : false,
             "es6" : true
