@@ -26,7 +26,7 @@
 					<view class="basis-xxl">
 						<scroll-view scroll-x class="nav z" scroll-with-animation :scroll-left="scrollLeft">
 							<block v-for="(item,index) in oneClass" :key="index">
-								<view class="cu-item" :class="index==TabCur?'select':''" @tap="tabSelect" :data-id="id">
+								<view class="cu-item" :class="index==TabCur?'select':''" @tap="tabSelect" :data-index="index" :data-id="item.id">
 									<view class="text-light">{{ item.name }}</view>
 									<view class="tab-dot bg-white"/>
 								</view>
@@ -53,9 +53,9 @@
 				</swiper>
 			</view>
 			<view class="cu-list grid col-3 no-border margin-bottom-sm">
-				<view class="cu-item" v-for="(item,index) in 6" :key="index" :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]">
+				<view class="cu-item" v-for="(item,index) in twoClass" :key="index">
 					<view class="cuIcon-cardboardfill text-black"></view>
-					<text class="text-light">二级分类</text>
+					<text class="text-light">{{ item.name }}</text>
 				</view>
 			</view>
 			<!--标题-->
@@ -65,46 +65,57 @@
 						<image class="img-aau" src="/static/aau.png" lazy-load mode="widthFix"/>
 					</view>
 					<view class="basis-xs text-center">
-						<text class="text-black text-xl text-bold">为您推荐</text>
+						<text class="text-black text-xl text-bold">推荐商铺</text>
 					</view>
 					<view class="basis-sm text-left">
 						<image class="img-aau" src="/static/aau.png" lazy-load mode="widthFix"/>
 					</view>
 				</view>
 			</view>
-			<view class="grid col-2">
-				<view v-for="(item,index) in 5" :key="index" @tap="toShop" >
-					<view class="cu-card" :style="[{animation: 'show ' + ((index+1)*0.2+1) + 's 1'}]">
+			<view class="margin-top-xl text-light"  v-if="shopList.length <= 0">
+				<view class="text-center">暂时还没有商铺加盟</view>
+				<view class="text-center">欢迎致电<text class="text-red">18010091016</text>咨询</view>
+			</view>
+			<view class="grid col-2">	
+				<view v-for="(item,index) in shopList" :key="index" @tap="toShop" >
+					<view class="cu-card" >
 						<view class="cu-item shadow" style="margin: 6px;">
 							<view>
-								<image :src="swiperList[index].url" mode="aspectFill" style="height: 130px;"/>
+								<image :src="imgHome+item.cover" mode="aspectFill" style="height: 130px;"/>
 							</view>
 							<view class="padding-sm">
-								<view class="text-bold text-lg margin-bottom-sm">商铺名称商铺名称商铺名称商铺名称</view>
-								<view class="margin-bottom-sm text-grey text-light">主营一行简介</view>
+								<view class="text-bold text-lg margin-bottom-sm text-cut">{{ item.name }}</view>
+								<view class="margin-bottom-sm text-grey text-light text-cut">{{ item.shopInfo }}</view>
 								<view class="text-gray text-sm">
 									<text class="cuIcon-locationfill text-light">距离您2.3km</text>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
+				</view>	
 			</view>
+			<view class="text-gray text-light text-center margin-xl">
+				<view class="cu-load load-cuIcon" :class="!isLoad?'loading':'over'" >数据加载中，请稍后</view>
+			</view>
+			
 		</view>
 		<view class="cu-tabbar-height"></view>
 	</view>
 </template>
 
 <script>
-	import { getList } from '@/api/content/home'
+	import { getOneList, getTwoList, getRecommendList } from '@/api/content/home'
 	export default {
 		data() {
 			return {
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
+				isLoad: true,
+				loadText: "",
 				TabCur: 0,
 				scrollLeft: 0,
 				cardCur: 0,
+				imgHome:"http://image.lonelysky.com.cn/",
 				swiperList: [{
 					id: 0,
 					type: 'image',
@@ -137,16 +148,16 @@
 				dotStyle: false,
 				towerStart: 0,
 				direction: '',
-				oneClass:[]
+				oneClass:[],
+				twoClass:[],
+				shopList:[]
 			}
 		},
 		created() {
-			var that = this;
-			getList(1,10,null).then(res => {
-				that.oneClass = res.data;
-			}).catch(err => {
-				console.log(err);
-			})
+			this.loadOneClass();
+		},
+		onReachBottom() {
+			console.log(123)
 		},
 		methods: {
 			style() {
@@ -160,8 +171,12 @@
 				return style
 			},
 			tabSelect(e) {
-				this.TabCur = e.currentTarget.dataset.id;
+				this.TabCur = e.currentTarget.dataset.index;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				var id = e.currentTarget.dataset.id;
+				
+				this.loadTwoClass(id)
+				this.loadRecommend(id)
 			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
@@ -182,6 +197,34 @@
 			toSearch(){
 				uni.navigateTo({
 					url:"/pages/home/search"
+				})
+			},
+			loadOneClass(){
+				var that = this;
+				getOneList().then(res => {
+					that.oneClass = res.data;
+					that.loadTwoClass(res.data[0].id)
+					that.loadRecommend(res.data[0].id)
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			loadTwoClass(id){
+				var that = this;
+				getTwoList({oneClassid:id}).then(res => {
+					that.twoClass = res.data;
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			loadRecommend(id){
+				var that = this;
+				that.isLoad = true
+				getRecommendList({oneClassid:id}).then(res => {
+					that.shopList = res.data.records;
+					that.isLoad = false
+				}).catch(err => {
+					console.log(err);
 				})
 			}
 			
