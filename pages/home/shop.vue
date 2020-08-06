@@ -45,7 +45,7 @@
 			<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation :scroll-top="verticalNavTop" style="height:calc(100vh - 375upx);">
 				<view class="cu-item" :class="index==typeTabCur?'text-red cur':''" v-for="(item,index) in listType" :key="index" @tap="TabSelect"
 				 :data-id="index">
-					{{ item.name}}
+					{{ item.name }}
 				</view>
 			</scroll-view>
 			<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375upx)"

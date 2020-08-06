@@ -87,7 +87,7 @@
 								<view class="text-bold text-lg margin-bottom-sm text-cut">{{ item.name }}</view>
 								<view class="margin-bottom-sm text-grey text-light text-cut">{{ item.shopInfo }}</view>
 								<view class="text-gray text-sm">
-									<text class="cuIcon-locationfill text-light">距离您2.3km</text>
+									<text class="cuIcon-locationfill text-light">浏览过人数 {{ item.viewCount }}</text>
 								</view>
 							</view>
 						</view>
