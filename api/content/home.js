@@ -27,3 +27,13 @@ export const getRecommendList = (params) => {
 	})
 }
 
+export const inShop = (id) => {
+	return request({
+		url: 'web/home/in_shop',
+		method: 'get',
+		params: {
+			id
+		}
+	})
+}
+

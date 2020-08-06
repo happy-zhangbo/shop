@@ -77,7 +77,7 @@
 				<view class="text-center">欢迎致电<text class="text-red">18010091016</text>咨询</view>
 			</view>
 			<view class="grid col-2">	
-				<view v-for="(item,index) in shopList" :key="index" @tap="toShop" >
+				<view v-for="(item,index) in shopList" :key="index" @tap="toShop(item.id)" >
 					<view class="cu-card" >
 						<view class="cu-item shadow" style="margin: 6px;">
 							<view>
@@ -95,7 +95,8 @@
 				</view>	
 			</view>
 			<view class="text-gray text-light text-center margin-xl">
-				<view class="cu-load load-cuIcon" :class="!isLoad?'loading':'over'" >数据加载中，请稍后</view>
+				<view class="cu-load load-cuIcon loading" v-if="isLoad">数据加载中，请稍后</view>
+				<view class="" v-else @tap="loadRecommend">点击加载更多</view>
 			</view>
 			
 		</view>
@@ -184,9 +185,9 @@
 			cardSwiper(e) {
 				this.cardCur = e.detail.current
 			},
-			toShop(){
+			toShop(id){
 				uni.navigateTo({
-					url:"/pages/home/shop"
+					url:"/pages/home/shop?id="+id
 				})
 			},
 			toRegion(){

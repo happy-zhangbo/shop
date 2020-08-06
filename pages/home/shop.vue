@@ -7,15 +7,27 @@
 				<block slot="right">
 					<view>
 						<text class="cuIcon-dianhua padding-lr" style="font-size: 40upx;"></text>
-						<!-- <text class="cuIcon-searchlist padding-lr" style="font-size: 50upx;"></text> -->
+						<!-- <text class="cuIcon-forwardfill padding-lr" style="font-size: 50upx;"></text> -->
 					</view>
 				</block>
 			</cu-custom>
 		</view>
-		<view class="bg-img flex align-end" style="background-image: url('https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg');height: 407upx;">
+		<view class="bg-img flex align-end" style="height: 407upx;" :style="{backgroundImage:'url('+imgHome+shopInfo.cover+')'}">
 			<view class="bg-shadeBottom padding padding-top-xl flex-sub">
-				<view class="text-bold text-xl margin-bottom-sm">商铺名称商铺名称商铺名称商铺名称</view>
-				<view class="text-df text-gray">公告：活动内容活动内容活动内容活动内容</view>
+				<view class="flex justify-between align-end" style="margin-bottom: 10upx;">
+					<view class="basis-xl">
+						<view class="text-bold text-xl">{{ shopInfo.name }}</view>
+						<view class="flex align-center">
+							<text class='cu-tag radius bg-red sm'>公告</text>
+							<text class="margin-left-sm">{{ shopInfo.announcement }}</text>
+						</view>
+					</view>
+				</view>
+				<view class="text-df">{{ shopInfo.shopInfo }}{{ shopInfo.shopInfo }}</view>
+				
+				
+				
+				
 			</view>
 		</view>
 		<!-- <swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000"
@@ -29,11 +41,11 @@
 				{{ item }}
 			</view>
 		</scroll-view>
-		<view class="VerticalBox" v-if="tabTopCur == 0">
+		<view class="VerticalBox padding-bottom-sm" v-if="tabTopCur == 0">
 			<scroll-view class="VerticalNav nav" scroll-y scroll-with-animation :scroll-top="verticalNavTop" style="height:calc(100vh - 375upx);">
 				<view class="cu-item" :class="index==typeTabCur?'text-red cur':''" v-for="(item,index) in listType" :key="index" @tap="TabSelect"
 				 :data-id="index">
-					商品分类
+					{{ item.name}}
 				</view>
 			</scroll-view>
 			<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375upx)"
@@ -41,15 +53,20 @@
 				<view class="padding-top padding-lr" v-for="(item,index) in listType" :key="index" :id="'main-'+index">
 					<view class="cu-bar solid-bottom bg-white">
 						<view class="action">
-							<text class="cuIcon-title text-red"></text> 分类标题 {{ item.name }}</view>
+							<text class="cuIcon-title text-red"></text> {{ item.name }}</view>
 					</view>
 					
 					<view class="cu-list">
-						<view class="bg-white flex padding" v-for="(item,index) in 2" :key="index" @tap="toProduct">
-							<view class="cu-avatar xl" style="border-radius: 10px;background-image:url(../../static/1280602914-5d183529018fc_articlex.png);"></view>
-							<view class="margin-left">
-								<view class="text-bold margin-bottom-sm">商品名称商品名称商品名称商品名称</view>
-								<view class="text-gray text-sm text-cut margin-bottom-sm">简介简介简介简介简介简介</view>
+						<view class="bg-white padding" v-if="item.commodityList.length <= 0">
+							<view class="text-light text-center text-sm text-gray">
+								这个分类下没有商品
+							</view>
+						</view>
+						<view class="bg-white flex padding" v-for="(item,index) in item.commodityList" :key="index" @tap="toProduct">
+							<view class="cu-avatar xl" :style="{backgroundImage:'url('+imgHome+item.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
+							<view class="margin-left" style="width: 100%;">
+								<view class="text-bold margin-bottom-sm">{{ item.title }}</view>
+								<view class="text-gray text-sm margin-bottom-sm">{{ item.desc }}</view>
 								<view class="text-red text-xl flex justify-between">
 									<view><text class="text-sm">￥</text>64</view>
 									<view>
@@ -67,27 +84,37 @@
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-location text-black"></text>
-						<text class="text-black text-light">北京市朝阳区九鼎建材市场</text>
+						<text class="text-black text-light">{{ shopInfo.address }}</text>
 						<view class="grid col-4 margin-top-sm">
-							<view class="margin-lr">
-								<image style="height: 100px;border-radius: 3px;" src="../../static/1280602914-5d183529018fc_articlex.png" mode="aspectFill"></image>
+							<view class="margin-lr-sm" v-for="(item,index) in shopCoverArrayImg" :key="index">
+								<image style="height: 100px;border-radius: 3px;" :src="imgHome+item" mode="aspectFit"></image>
 							</view>
-							<view class="margin-lr">
-								<image style="height: 100px;border-radius: 3px;" src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg" mode="aspectFill"></image>
-							</view>
+
 						</view>
 					</view>
 				</view>
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-time text-black text-light"></text>
-						<text class="text-black text-light">营业时间：09:00 ~ 22:00</text>
+						<text class="text-black text-light">店铺公告：{{ shopInfo.announcement}}</text>
+					</view>
+				</view>
+				<view class="cu-item">
+					<view class="content">
+						<text class="cuIcon-time text-black text-light"></text>
+						<text class="text-black text-light">店铺介绍：{{ shopInfo.shopInfo}}</text>
+					</view>
+				</view>
+				<view class="cu-item">
+					<view class="content">
+						<text class="cuIcon-time text-black text-light"></text>
+						<text class="text-black text-light">营业时间：{{ shopInfo.openingHours}}</text>
 					</view>
 				</view>
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-dianhua text-black text-light"></text>
-						<text class="text-black text-light">联系方式：18010091016</text>
+						<text class="text-black text-light">联系方式：{{ shopInfo.contactInfo}}</text>
 					</view>
 				</view>
 			</view>
@@ -121,6 +148,7 @@
 </template>
 
 <script>
+	import { inShop } from "@/api/content/home"
 	export default {
 		data() {
 			return {
@@ -129,7 +157,9 @@
 				scrollLeft: 0,
 				listType: [],
 				typeTabCur: 0,
+				shopInfo:{},
 				mainCur: 0,
+				imgHome:"http://image.lonelysky.com.cn/",
 				verticalNavTop: 0,
 				load: true,
 				StatusBar: this.StatusBar,
@@ -139,62 +169,43 @@
 					"名称",
 					"名称",
 					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
-					"名称",
 					"名称"
 				]
 			}
 		},
-		onLoad() {
+		
+		onLoad(e) {
 			uni.showLoading({
 				title: '加载中...',
 				mask: true
 			});
-			let list = [{}];
-			for (let i = 0; i < 26; i++) {
-				list[i] = {};
-				list[i].name = String.fromCharCode(65 + i);
-				list[i].id = i;
-			}
-			this.listType = list;
-			this.listCur = list[10];
+			var that = this;
+			inShop(e.id).then(res =>{
+				that.shopInfo = res.data;
+				that.listType = res.data.categoriesVOList;
+			}).catch(err => {
+				console.log(err);
+			})
+			
+			
+			// let list = [{}];
+			// for (let i = 0; i < 26; i++) {
+			// 	list[i] = {};
+			// 	list[i].name = String.fromCharCode(65 + i);
+			// 	list[i].id = i;
+			// }
+			// this.listType = list;
+			//this.listCur = list[10];
 		},
 		onReady() {
 			uni.hideLoading()
+		},
+		computed:{
+			shopCoverArrayImg(){
+				var list = this.shopInfo.coverArray.split(",")
+				
+				return list
+			}
 		},
 		methods: {
 			tabTopSelect(e){
@@ -244,7 +255,8 @@
 			},
 			hideModal(){
 				this.showSpecsModel = false;
-			}
+			},
+			
 		},
 	}
 </script>
