@@ -57,20 +57,20 @@
 					</view>
 					
 					<view class="cu-list">
-						<view class="bg-white padding" v-if="item.commodityList.length <= 0">
+						<view class="bg-white padding" v-if="item.commodityVOList.length <= 0">
 							<view class="text-light text-center text-sm text-gray">
 								这个分类下没有商品
 							</view>
 						</view>
-						<view class="bg-white flex padding" v-for="(item,index) in item.commodityList" :key="index" @tap="toProduct">
+						<view class="bg-white flex padding" v-for="(item,index) in item.commodityVOList" :key="index" @tap="toProduct(item.id)">
 							<view class="cu-avatar xl" :style="{backgroundImage:'url('+imgHome+item.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
 							<view class="margin-left" style="width: 100%;">
 								<view class="text-bold margin-bottom-sm">{{ item.title }}</view>
 								<view class="text-gray text-sm margin-bottom-sm">{{ item.desc }}</view>
 								<view class="text-red text-xl flex justify-between">
-									<view><text class="text-sm">￥</text>64</view>
+									<view><text class="text-sm">￥</text>{{ item.specifList[0].price }}</view>
 									<view>
-										<button class="cu-btn round sm bg-black" @tap.stop="show_specs">查看规格</button>
+										<button class="cu-btn round sm bg-black" @tap.stop="show_specs(item.specifList)">查看规格</button>
 									</view>
 								</view>
 							</view>
@@ -134,8 +134,8 @@
 					</view>
 					<scroll-view scroll-y="true" style="height: 300px;">
 						<view class="flex margin-bottom-sm text-light" v-for="(item,index) in specs" :key="index">
-							<view class="basis-sm">名称{{ index }}</view>
-							<view class="basis-sm text-red text-lg"><text class="text-sm">￥</text>123</view>
+							<view class="basis-sm">{{ item.title }}</view>
+							<view class="basis-sm text-red text-lg"><text class="text-sm">￥</text>{{ item.price }}</view>
 						</view>
 					</scroll-view>
 				</view>
@@ -181,6 +181,7 @@
 			});
 			var that = this;
 			inShop(e.id).then(res =>{
+				console.log(res);
 				that.shopInfo = res.data;
 				that.listType = res.data.categoriesVOList;
 			}).catch(err => {
@@ -203,7 +204,6 @@
 		computed:{
 			shopCoverArrayImg(){
 				var list = this.shopInfo.coverArray.split(",")
-				
 				return list
 			}
 		},
@@ -225,7 +225,7 @@
 				let tabHeight = 0;
 				if (this.load) {
 					for (let i = 0; i < this.listType.length; i++) {
-						let view = uni.createSelectorQuery().select("#main-" + this.listType[i].id);
+						let view = uni.createSelectorQuery().select("#main-" + i);
 						view.fields({
 							size: true
 						}, data => {
@@ -245,12 +245,13 @@
 					}
 				}
 			},
-			toProduct(){
+			toProduct(id){
 				uni.navigateTo({
-					url:"/pages/home/product"
+					url:"/pages/home/product?id="+id
 				})
 			},
-			show_specs(){
+			show_specs(specsArray){
+				this.specs = specsArray
 				this.showSpecsModel = true;
 			},
 			hideModal(){

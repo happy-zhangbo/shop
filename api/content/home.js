@@ -37,3 +37,24 @@ export const inShop = (id) => {
 	})
 }
 
+export const selectSpecif = (params) => {
+	return request({
+		url: 'web/home/specif',
+		method: 'get',
+		params: {
+			...params
+		}
+	})
+}
+
+
+
+export const commdity = (id) => {
+	return request({
+		url: 'web/home/commdity',
+		method: 'get',
+		params: {
+			id
+		}
+	})
+}
