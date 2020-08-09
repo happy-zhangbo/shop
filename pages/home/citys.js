@@ -1,9 +1,9 @@
 export default [{
             'id': '110100',
-            'title': '北京'
+            'title': '北京市'
         }, {
             'id': '120100',
-            'title': '天津'
+            'title': '天津市'
         }, {
             'id': '130100',
             'title': '石家庄市'

@@ -10,7 +10,7 @@
 				</view>
 				<view class="action">
 					<view @tap="toRegion">
-						北京市<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
+						{{ location.title }}<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
 					</view>
 				</view>
 			</view>
@@ -47,14 +47,16 @@
 				<swiper class="screen-swiper square-dot" autoplay circular indicator-dots>
 					<swiper-item v-for="(item,index) in swiperList" :key="index">
 						<view class="padding-lr">
-							<image :src="item.url" mode="widthFix"/>
+							<image :src="website.imgHome+item.imgPath" mode="widthFix"/>
 						</view>
 					</swiper-item>
 				</swiper>
 			</view>
 			<view class="cu-list grid col-3 no-border margin-bottom-sm">
-				<view class="cu-item" v-for="(item,index) in twoClass" :key="index">
-					<view class="cuIcon-cardboardfill text-black"></view>
+				<view class="cu-item" v-for="(item,index) in twoClass" :key="index" @tap="toShopList(item.id)">
+					<view class="text-center">
+						<image class="" :src="website.imgHome+item.cover" style="width: 100upx;height: 100upx;"></image>
+					</view>
 					<text class="text-light">{{ item.name }}</text>
 				</view>
 			</view>
@@ -81,7 +83,7 @@
 					<view class="cu-card" >
 						<view class="cu-item shadow" style="margin: 6px;">
 							<view>
-								<image :src="imgHome+item.cover" mode="aspectFill" style="height: 130px;"/>
+								<image :src="website.imgHome+item.cover" mode="aspectFill" style="height: 130px;"/>
 							</view>
 							<view class="padding-sm">
 								<view class="text-bold text-lg margin-bottom-sm text-cut">{{ item.name }}</view>
@@ -105,10 +107,12 @@
 </template>
 
 <script>
-	import { getOneList, getTwoList, getRecommendList } from '@/api/content/home'
+	import { getOneList, getTwoList, getRecommendList, index_swiper } from '@/api/content/home'
+	import website from '@/config/website'
 	export default {
 		data() {
 			return {
+				website: website,
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				isLoad: true,
@@ -116,49 +120,28 @@
 				TabCur: 0,
 				scrollLeft: 0,
 				cardCur: 0,
-				imgHome:"http://image.lonelysky.com.cn/",
-				swiperList: [{
-					id: 0,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big84000.jpg'
-				}, {
-					id: 1,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
-				}, {
-					id: 2,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
-				}, {
-					id: 3,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-				}, {
-					id: 4,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
-				}, {
-					id: 5,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
-				}, {
-					id: 6,
-					type: 'image',
-					url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
-				}],
+				swiperList: [],
 				dotStyle: false,
 				towerStart: 0,
 				direction: '',
 				oneClass:[],
 				twoClass:[],
-				shopList:[]
+				shopList:[],
+				location:{
+					'id': '110100',
+					'title': '北京市'
+				}
 			}
 		},
 		created() {
+			var that = this;
+			uni.getStorage({
+			    key: 'region',
+			    success: function (res) {
+					that.location = res.data;
+			    }
+			});
 			this.loadOneClass();
-		},
-		onReachBottom() {
-			console.log(123)
 		},
 		methods: {
 			style() {
@@ -178,6 +161,7 @@
 				
 				this.loadTwoClass(id)
 				this.loadRecommend(id)
+				this.loadIndexSwiper(id)
 			},
 			DotStyle(e) {
 				this.dotStyle = e.detail.value
@@ -200,12 +184,19 @@
 					url:"/pages/home/search"
 				})
 			},
+			toShopList(){
+				var one_id = this.oneClass[this.TabCur].id
+				uni.navigateTo({
+					url:"/pages/home/shop-list?id="+one_id
+				})
+			},
 			loadOneClass(){
 				var that = this;
 				getOneList().then(res => {
 					that.oneClass = res.data;
 					that.loadTwoClass(res.data[0].id)
 					that.loadRecommend(res.data[0].id)
+					that.loadIndexSwiper(res.data[0].id)
 				}).catch(err => {
 					console.log(err);
 				})
@@ -220,10 +211,20 @@
 			},
 			loadRecommend(id){
 				var that = this;
-				that.isLoad = true
-				getRecommendList({oneClassid:id}).then(res => {
+				that.isLoad = true;
+				var regionId = this.location.id;
+				regionId = regionId.substring(0,regionId.length-2)
+				getRecommendList({oneClassid:id,regionId:regionId}).then(res => {
 					that.shopList = res.data.records;
 					that.isLoad = false
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			loadIndexSwiper(id){
+				var that = this;
+				index_swiper({oneClassid:id}).then(res => {
+					that.swiperList = res.data;
 				}).catch(err => {
 					console.log(err);
 				})

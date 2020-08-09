@@ -119,6 +119,10 @@
             "path" : "pages/home/search-result",
             "style" : {}
         }
+        ,{
+            "path" : "pages/home/shop-list",
+            "style" : {}
+        }
     ],
 	"globalStyle": {
 		"mp-alipay": {

@@ -8,8 +8,10 @@
 					<text class="cuIcon-dianhua padding-lr" style="font-size: 40upx;"></text>
 				</block>
 			</cu-custom>
+			
 		</view>
-		<view class="bg-img flex align-end" style="background-image: url('../../static/1280602914-5d183529018fc_articlex.png');height: 407upx;"></view>
+		<view class="bg-img flex align-end" :style="{backgroundImage:'url('+website.imgHome+commdity.cover+')'}" style="height: 407upx;"></view>
+		
 		<view class="bg-white padding">
 			<view class="text-bold text-xl margin-bottom-sm">{{ commdity.title }}</view>
 			<view class="text-gray text-sm text-cut margin-bottom-sm">{{ commdity.desc }}</view>
@@ -58,7 +60,7 @@
 				</view>
 			</view> -->
 			<view>
-				<rich-text :nodes="commdity.content"></rich-text>
+				<rich-text :nodes="commdity.content" class="content"></rich-text>
 			</view>
 		</view>
 		<view class="cu-modal" :class="showSpecsModel?'show':''">
@@ -91,16 +93,20 @@
 
 <script>
 	import { commdity } from '@/api/content/home'
+	import website from '@/config/website'
 	export default {
 		data() {
 			return {
+				website: website,
 				showSpecsModel:false,
 				specs:[
 					"名称",
 					"名称",
 					"名称"
 				],
-				commdity:{}
+				commdity:{
+					cover:"timg.gif"
+				},
 			}
 		},
 		onLoad(e) {
@@ -123,7 +129,8 @@
 				if(this.commdity.specifList != undefined){
 					return this.commdity.specifList.length > 3
 				}
-			}
+			},
+			
 		},
 		methods: {
 			show_specs(){
@@ -140,5 +147,8 @@
 	.fixed {
 		position: fixed;
 		z-index: 99;
+	}
+	.content image{
+		width: 100%;
 	}
 </style>

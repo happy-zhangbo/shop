@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<cu-custom bgImage="https://image.weilanwl.com/color2.0/plugin/sylb2244.jpg" :isBack="true"><block slot="backText">返回</block>
-			<block slot="content">索引</block>
+			<block slot="content">选择城市</block>
 		</cu-custom>
 		<city-select
 			@cityClick="cityClick"
@@ -26,44 +26,55 @@
 				formatName: 'title',
 				//当前城市
 				activeCity: {
-					id: 110100,
-					title: '南京市'
+					id: '110100',
+					title: '北京市'
 				},
 				//热门城市
-				hotCity: [],
+				hotCity: [{
+				 		id: '110100',
+				 		title: '北京市'
+				 }]
 				//显示的城市数据
-				obtainCitys: [
-					{
-						id: 0,
-						title: '南京'
-					},
-					{
-						id: 1,
-						title: '北京'
-					},
-					{
-						id: 2,
-						title: '天津'
-					},
-					{
-						id: 3,
-						title: '东京'
-					}
-				]
+				// obtainCitys: [
+				// 	{
+				// 		id: 0,
+				// 		title: '南京'
+				// 	},
+				// 	{
+				// 		id: 1,
+				// 		title: '北京'
+				// 	},
+				// 	{
+				// 		id: 2,
+				// 		title: '天津'
+				// 	},
+				// 	{
+				// 		id: 3,
+				// 		title: '东京'
+				// 	}
+				// ]
 			}
 		},
 		onLoad() {
-			this.obtainCitys = citys
+			var that = this;
+			that.obtainCitys = citys
+			uni.getStorage({
+			    key: 'region',
+			    success: function (res) {
+					that.activeCity = res.data;
+			    }
+			});
 		},
 		methods: {
 			cityClick(item) {
-				uni.showToast({
-					icon: 'none',
-					title: 'item: ' + JSON.stringify(item),
-					// #ifdef MP-WEIXIN
-					duration: 3000,
-					// #endif
-					mask: true
+				uni.setStorage({
+				    key: 'region',
+				    data: item,
+				    success: function () {
+				        uni.reLaunch({
+				            url: '/pages/index/index?index=home'
+				        });
+				    }
 				})
 			}
 		}

@@ -58,3 +58,23 @@ export const commdity = (id) => {
 		}
 	})
 }
+
+export const index_swiper = (params) => {
+	return request({
+		url: 'web/home/index_swiper',
+		method: 'get',
+		params: {
+		  ...params
+		}
+	})
+}
+
+export const getNearbyList = (params) => {
+	return request({
+		url: 'web/home/nearby',
+		method: 'get',
+		params: {
+		  ...params
+		}
+	})
+}

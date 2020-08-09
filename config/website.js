@@ -16,6 +16,7 @@ export default {
   statusWhiteList: [],
   //配置首页不可关闭
   isFirstPage: false,
+  imgHome:"http://image.lonelysky.com.cn/",
   fistPage: {
     label: "首页",
     value: "/wel/index",

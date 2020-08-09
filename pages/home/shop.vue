@@ -12,7 +12,7 @@
 				</block>
 			</cu-custom>
 		</view>
-		<view class="bg-img flex align-end" style="height: 407upx;" :style="{backgroundImage:'url('+imgHome+shopInfo.cover+')'}">
+		<view class="bg-img flex align-end" style="height: 407upx;" :style="{backgroundImage:'url('+website.imgHome+shopInfo.cover+')'}">
 			<view class="bg-shadeBottom padding padding-top-xl flex-sub">
 				<view class="flex justify-between align-end" style="margin-bottom: 10upx;">
 					<view class="basis-xl">
@@ -24,10 +24,6 @@
 					</view>
 				</view>
 				<view class="text-df">{{ shopInfo.shopInfo }}{{ shopInfo.shopInfo }}</view>
-				
-				
-				
-				
 			</view>
 		</view>
 		<!-- <swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000"
@@ -63,7 +59,7 @@
 							</view>
 						</view>
 						<view class="bg-white flex padding" v-for="(item,index) in item.commodityVOList" :key="index" @tap="toProduct(item.id)">
-							<view class="cu-avatar xl" :style="{backgroundImage:'url('+imgHome+item.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
+							<view class="cu-avatar xl" :style="{backgroundImage:'url('+website.imgHome+item.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
 							<view class="margin-left" style="width: 100%;">
 								<view class="text-bold margin-bottom-sm">{{ item.title }}</view>
 								<view class="text-gray text-sm margin-bottom-sm">{{ item.desc }}</view>
@@ -87,7 +83,7 @@
 						<text class="text-black text-light">{{ shopInfo.address }}</text>
 						<view class="grid col-4 margin-top-sm">
 							<view class="margin-lr-sm" v-for="(item,index) in shopCoverArrayImg" :key="index">
-								<image style="height: 100px;border-radius: 3px;" :src="imgHome+item" mode="aspectFit"></image>
+								<image style="height: 100px;border-radius: 3px;" :src="website.imgHome+item" mode="aspectFit"></image>
 							</view>
 
 						</view>
@@ -149,17 +145,20 @@
 
 <script>
 	import { inShop } from "@/api/content/home"
+	import website from '@/config/website'
 	export default {
 		data() {
 			return {
+				website: website,
 				tabTop: ["商品","店铺信息"],
 				tabTopCur: 0,
 				scrollLeft: 0,
 				listType: [],
 				typeTabCur: 0,
-				shopInfo:{},
+				shopInfo:{
+					cover:"timg.gif"
+				},
 				mainCur: 0,
-				imgHome:"http://image.lonelysky.com.cn/",
 				verticalNavTop: 0,
 				load: true,
 				StatusBar: this.StatusBar,
@@ -181,7 +180,6 @@
 			});
 			var that = this;
 			inShop(e.id).then(res =>{
-				console.log(res);
 				that.shopInfo = res.data;
 				that.listType = res.data.categoriesVOList;
 			}).catch(err => {

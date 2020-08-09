@@ -31,12 +31,12 @@
 				</view>
 				<view :class="PageCur=='home'?'text-green':'text-gray'">首页</view>
 			</view>
-			<view class="action" @click="NavChange" data-cur="shop">
+			<!-- <view class="action" @click="NavChange" data-cur="shop">
 				<view class='cuIcon-cu-image'>
 					<image :src="'/static/tabbar/plugin' + [PageCur == 'shop'?'_cur':''] + '.png'"></image>
 				</view>
 				<view :class="PageCur=='shop'?'text-green':'text-gray'">店铺</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -47,6 +47,11 @@
 		return {
 				PageCur: 'basics'
 			}
+		},
+		onLoad(e) {
+			if(undefined !== e.index){
+				this.PageCur = e.index;
+			}	
 		},
 		methods: {
 			NavChange: function(e) {
