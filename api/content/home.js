@@ -78,3 +78,14 @@ export const getNearbyList = (params) => {
 		}
 	})
 }
+
+export const getSearchResult = (keyword) => {
+	return request({
+		url: 'web/home/search',
+		method: 'get',
+		params: {
+		  ...keyword
+		}
+	})
+}
+

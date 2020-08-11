@@ -185,8 +185,7 @@
 					duration: 2000
 				});
 				uni.navigateTo({
-					url:"/pages/home/search-result",
-					
+					url:"/pages/home/search-result?keyword="+keyword
 				})
 				//以下是示例跳转淘宝搜索，可自己实现搜索逻辑
 				/*

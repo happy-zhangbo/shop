@@ -184,10 +184,10 @@
 					url:"/pages/home/search"
 				})
 			},
-			toShopList(){
+			toShopList(twoId){
 				var one_id = this.oneClass[this.TabCur].id
 				uni.navigateTo({
-					url:"/pages/home/shop-list?id="+one_id
+					url:"/pages/home/shop-list?oneId="+one_id+"&twoId="+twoId
 				})
 			},
 			loadOneClass(){

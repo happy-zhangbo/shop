@@ -42,6 +42,10 @@
 				</view>
 			</view>
 		</view>
+		<view class="margin-top-xl text-light"  v-if="shopList.length <= 0">
+			<view class="text-center">此分类暂时还没有商铺加盟</view>
+			<view class="text-center">欢迎致电<text class="text-red">18010091016</text>咨询</view>
+		</view>
 	</view>
 </template>
 
@@ -53,7 +57,6 @@
 			return {
 				website: website,
 				sortList:[
-					"附近商铺",
 					"浏览量",
 				],
 				twoClass:[],
@@ -70,7 +73,11 @@
 			}
 		},
 		onLoad(e){
-			this.loadTwoClass(e.id)
+			// #ifndef H5
+				this.sortList.unshift("附近商铺")
+			// #endif
+			
+			this.loadTwoClass(e.oneId,e.twoId);
 			
 			
 		},
@@ -78,9 +85,11 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				this.loadNearbyList(this.twoClass[this.TabCur].id);
 			},
 			sortTabSelect(e){
 				this.SortTabCur = e.currentTarget.dataset.id;
+				
 				//this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			scroll: function(e) {
@@ -101,11 +110,16 @@
 					url:"/pages/home/search"
 				})
 			},
-			loadTwoClass(id){
+			loadTwoClass(id,twoId){
 				var that = this;
 				getTwoList({oneClassid:id}).then(res => {
 					that.twoClass = res.data;
-					that.loadNearbyList(res.data[0].id)
+					that.twoClass.forEach(function(item,index){
+						if(item.id == twoId){
+							that.TabCur = index;
+						}
+					});
+					that.loadNearbyList(twoId)
 				}).catch(err => {
 					console.log(err);
 				})
@@ -117,6 +131,7 @@
 					success: function (res) {
 						console.log('当前位置的经度：' + res.longitude);
 						console.log('当前位置的纬度：' + res.latitude);
+						
 						var params = { location: res.longitude+","+res.latitude, twoClassid: twoid}
 						getNearbyList(params).then(res => {
 							that.shopList = res.data;
