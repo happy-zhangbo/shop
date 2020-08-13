@@ -17,12 +17,14 @@ export const getTwoList = (params) => {
 	})
 }
 
-export const getRecommendList = (params) => {
+export const getRecommendList = (current,size,params) => {
 	return request({
 		url: 'web/home/recommend',
 		method: 'get',
 		params: {
-			...params
+			...params,
+			current,
+			size
 		}
 	})
 }
@@ -69,12 +71,14 @@ export const index_swiper = (params) => {
 	})
 }
 
-export const getNearbyList = (params) => {
+export const getNearbyList = (current,size,params) => {
 	return request({
 		url: 'web/home/nearby',
 		method: 'get',
 		params: {
-		  ...params
+		  ...params,
+		  current,
+		  size
 		}
 	})
 }

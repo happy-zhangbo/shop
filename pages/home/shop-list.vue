@@ -3,6 +3,11 @@
 		<!-- 头部 -->
 		<cu-custom bgImage="https://image.weilanwl.com/color2.0/plugin/sylb2244.jpg" :isBack="true"><block slot="backText">返回</block>
 			<block slot="content">一级分类名称</block>
+			<block slot="right">
+				<view @tap="toRegion" class="padding-lr">
+					{{ location.title }}<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
+				</view>
+			</block>
 		</cu-custom>
 		<view>
 		<view class="bg-white">
@@ -41,6 +46,10 @@
 					</view>
 				</view>
 			</view>
+			<view class="text-gray text-light text-center margin-xl" v-if="shopList.length > 0">
+				<view class="cu-load load-cuIcon loading" v-if="isLoad">数据加载中，请稍后</view>
+				<view class="" v-else @tap="loadNearbyList(twoClass[TabCur].id)">点击加载更多</view>
+			</view>
 		</view>
 		<view class="margin-top-xl text-light"  v-if="shopList.length <= 0">
 			<view class="text-center">此分类暂时还没有商铺加盟</view>
@@ -63,21 +72,35 @@
 				StatusBar: this.StatusBar,
 				CustomBar: this.CustomBar,
 				TabCur: 0,
+				isLoad: true,
 				scrollLeft: 0,
 				SortTabCur: 0,
 				scrollTop: 0,
 				shopList:[],
 				old: {
 					scrollTop: 0
-				}
+				},
+				location:{
+					'id': '110100',
+					'title': '北京市'
+				},
+				size: 10,
+				cur: 0,
 			}
 		},
 		onLoad(e){
+			var that = this;
 			// #ifndef H5
-				this.sortList.unshift("附近商铺")
+				that.sortList.unshift("附近商铺")
 			// #endif
 			
-			this.loadTwoClass(e.oneId,e.twoId);
+			uni.getStorage({
+			    key: 'region',
+			    success: function (res) {
+					that.location = res.data;
+			    }
+			});
+			that.loadTwoClass(e.oneId,e.twoId);
 			
 			
 		},
@@ -85,6 +108,8 @@
 			tabSelect(e) {
 				this.TabCur = e.currentTarget.dataset.id;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
+				this.cur = 0;
+				this.shopList = [];
 				this.loadNearbyList(this.twoClass[this.TabCur].id);
 			},
 			sortTabSelect(e){
@@ -131,11 +156,15 @@
 					success: function (res) {
 						console.log('当前位置的经度：' + res.longitude);
 						console.log('当前位置的纬度：' + res.latitude);
-						
 						var params = { location: res.longitude+","+res.latitude, twoClassid: twoid}
-						getNearbyList(params).then(res => {
-							that.shopList = res.data;
-							console.log(res);
+						var size = that.size;
+						that.cur = that.cur+1;
+						that.isLoad = true;
+						getNearbyList(that.cur, size, params).then(res => {
+							that.shopList = that.shopList.concat(res.data.records);
+							that.isLoad = false
+						}).catch(err => {
+							console.log(err);
 						})
 					}
 				})

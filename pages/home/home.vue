@@ -98,7 +98,7 @@
 			</view>
 			<view class="text-gray text-light text-center margin-xl">
 				<view class="cu-load load-cuIcon loading" v-if="isLoad">数据加载中，请稍后</view>
-				<view class="" v-else @tap="loadRecommend">点击加载更多</view>
+				<view class="" v-else @tap="loadRecommend(oneClass[TabCur].id)">点击加载更多</view>
 			</view>
 			
 		</view>
@@ -130,7 +130,9 @@
 				location:{
 					'id': '110100',
 					'title': '北京市'
-				}
+				},
+				size: 10,
+				cur: 0,
 			}
 		},
 		created() {
@@ -155,6 +157,8 @@
 				return style
 			},
 			tabSelect(e) {
+				this.cur = 0;
+				this.shopList = [];
 				this.TabCur = e.currentTarget.dataset.index;
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				var id = e.currentTarget.dataset.id;
@@ -214,8 +218,10 @@
 				that.isLoad = true;
 				var regionId = this.location.id;
 				regionId = regionId.substring(0,regionId.length-2)
-				getRecommendList({oneClassid:id,regionId:regionId}).then(res => {
-					that.shopList = res.data.records;
+				var size = this.size;
+				this.cur = this.cur+1;
+				getRecommendList(this.cur, size, {oneClassid:id,regionId:regionId}).then(res => {
+					that.shopList = that.shopList.concat(res.data.records);
 					that.isLoad = false
 				}).catch(err => {
 					console.log(err);
@@ -224,6 +230,7 @@
 			loadIndexSwiper(id){
 				var that = this;
 				index_swiper({oneClassid:id}).then(res => {
+					
 					that.swiperList = res.data;
 				}).catch(err => {
 					console.log(err);
