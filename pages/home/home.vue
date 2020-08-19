@@ -3,16 +3,18 @@
 		<!-- 头部 -->
 		<view class="padding bg-gradual-pink top" :style="[{paddingTop:StatusBar+20+'px'}]">
 			<!-- 搜索-->
-			<view class="cu-bar search" style="min-height: 0px;">
-				<view class="search-form round" @tap="toSearch">
-					<text class="cuIcon-search"></text>关键词搜索
-					<!-- <input :adjust-position="false" type="text" placeholder="搜索" confirm-type="search" @tap="toSearch"></input> -->
+			
+			<view class="cu-bar search">
+				<!-- <view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big114004.jpg);"></view> -->
+				<view class="action"  @tap="toRegion">
+					<text>{{ location.cityName }}</text>
+					<text class="cuIcon-triangledownfill" style="font-size: 15px;margin-left: 2px;"></text>
 				</view>
-				<view class="action">
-					<view @tap="toRegion">
-						{{ location.title }}<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
-					</view>
+				<view class="search-form radius" @tap="toSearch">
+					<text class="cuIcon-search"></text>
+					<input :adjust-position="false" type="text" placeholder="搜索商品关键词" confirm-type="search"></input>
 				</view>
+				
 			</view>
 			<!-- 一级分类-->
 			<!-- <scroll-view scroll-x class="nav" scroll-with-animation :scroll-left="scrollLeft">
@@ -42,7 +44,7 @@
 			</view>
 		</view>
 		<!-- 轮播 -->
-		<view :style="[{paddingTop:CustomBar+68+'px'}]">
+		<view :style="[{paddingTop:CustomBar+100+'px'}]">
 			<view class="zaiui-swiper-box padding-tb-sm bg-white">
 				<swiper class="screen-swiper square-dot" autoplay circular indicator-dots>
 					<swiper-item v-for="(item,index) in swiperList" :key="index">
@@ -128,7 +130,7 @@
 				twoClass:[],
 				shopList:[],
 				location:{
-					'id': '110100',
+					'cityCode': '110100',
 					'title': '北京市'
 				},
 				size: 10,
@@ -216,7 +218,7 @@
 			loadRecommend(id){
 				var that = this;
 				that.isLoad = true;
-				var regionId = this.location.id;
+				var regionId = this.location.cityCode;
 				regionId = regionId.substring(0,regionId.length-2)
 				var size = this.size;
 				this.cur = this.cur+1;

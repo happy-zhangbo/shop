@@ -3,10 +3,7 @@
 	<view class="city-select">
 		<scroll-view :scroll-top="scrollTop" scroll-y="true" class="city-select-main" id="city-select-main" :scroll-into-view="toView">
 			<!-- 预留搜索-->
-			<view class="city-serach" v-if="isSearch">
-				
-				<input @input="keyInput" :placeholder="placeholder" class="city-serach-input"></input>
-			</view>
+			<view class="city-serach" v-if="isSearch"><input @input="keyInput" :placeholder="placeholder" class="city-serach-input" /></view>
 			<!-- 当前定位城市 -->
 			<view class="hot-title" v-if="activeCity && !serachCity">当前定位城市</view>
 			<view class="hot-city" v-if="activeCity && !serachCity">
@@ -29,7 +26,7 @@
 			<!-- 城市列表(搜索后)  -->
 			<view class="citys" v-if="serachCity">
 				<view v-for="(item, index) in searchDatas" :key="index" class="citys-row">
-					<view class="citys-item" @click="cityTrigger(item)">{{ item.name }}</view>
+					<view class="citys-item" :key="inx" @click="cityTrigger(item)">{{ item.name }}</view>
 				</view>
 			</view>
 		</scroll-view>
@@ -266,7 +263,7 @@ view {
 		line-height: vww(40);
 		font-size: vww(14);
 		padding: 0 vww(5);
-		border: 1px solid #EBEEF5;
+		border: 1px solid #4d8cfd;
 		border-radius: 3px;
 	}
 }

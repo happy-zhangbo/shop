@@ -4,9 +4,9 @@
 		<cu-custom bgImage="https://image.weilanwl.com/color2.0/plugin/sylb2244.jpg" :isBack="true"><block slot="backText">返回</block>
 			<block slot="content">一级分类名称</block>
 			<block slot="right">
-				<view @tap="toRegion" class="padding-lr">
+				<!-- <view @tap="toRegion" class="padding-lr">
 					{{ location.title }}<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
-				</view>
+				</view> -->
 			</block>
 		</cu-custom>
 		<view>

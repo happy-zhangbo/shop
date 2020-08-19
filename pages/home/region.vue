@@ -17,23 +17,25 @@
 
 <script>
 	import citys from './citys.js'
+	
 	import citySelect from "@/components/city-select/city-select.vue"
 	export default {
 		components: {citySelect},
 		data() {
 			return {
 				//需要构建索引参数的名称（注意：传递的对象里面必须要有这个名称的参数）
-				formatName: 'title',
+				formatName: 'cityName',
 				//当前城市
 				activeCity: {
-					id: '110100',
-					title: '北京市'
+					cityCode: '110100',
+					cityName: '北京市'
 				},
 				//热门城市
 				hotCity: [{
-				 		id: '110100',
-				 		title: '北京市'
-				 }]
+				 		cityCode: '110100',
+				 		cityName: '北京市'
+				 }],
+				 obtainCitys:[]
 				//显示的城市数据
 				// obtainCitys: [
 				// 	{
