@@ -40,7 +40,9 @@
 							<view class="margin-bottom-sm text-sm text-grey text-light">{{ item.shopInfo }}</view>
 						</view>
 						<view class="flex-treble text-right">
-							<view class="cuIcon-locationfill text-light margin-bottom-sm">{{ item.distance.substr(0,1) === '.'?'0'+item.distance:item.distance }}</view>
+							<block  v-if="SortTabCur == 1">
+								<view class="cuIcon-locationfill text-light margin-bottom-sm">{{ item.distance.substr(0,1) === '.'?'0'+item.distance:item.distance }}</view>
+							</block>
 							<button class="cu-btn bg-black sm">电话联系</button>
 						</view>
 					</view>
@@ -48,7 +50,7 @@
 			</view>
 			<view class="text-gray text-light text-center margin-xl" v-if="shopList.length > 0">
 				<view class="cu-load load-cuIcon loading" v-if="isLoad">数据加载中，请稍后</view>
-				<view class="" v-else @tap="loadNearbyList(twoClass[TabCur].id)">点击加载更多</view>
+				<view class="" v-else @tap="SortTabCur == 1?loadNearbyList(twoClass[TabCur].id):loadViewCountList(twoClass[TabCur].id)">点击加载更多</view>
 			</view>
 		</view>
 		<view class="margin-top-xl text-light"  v-if="shopList.length <= 0">
@@ -59,7 +61,7 @@
 </template>
 
 <script>
-	import { getTwoList, getNearbyList } from '@/api/content/home'
+	import { getTwoList, getNearbyList, getViewCountShop } from '@/api/content/home'
 	import website from '@/config/website'
 	export default {
 		data() {
@@ -91,7 +93,7 @@
 		onLoad(e){
 			var that = this;
 			// #ifndef H5
-				that.sortList.unshift("附近商铺")
+				that.sortList.push("附近商铺")
 			// #endif
 			
 			uni.getStorage({
@@ -110,11 +112,27 @@
 				this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 				this.cur = 0;
 				this.shopList = [];
-				this.loadNearbyList(this.twoClass[this.TabCur].id);
+				if(this.SortTabCur == 0){
+					this.loadViewCountList(this.twoClass[this.TabCur].id)
+				}else{
+					// #ifndef H5
+					this.loadNearbyList(this.twoClass[this.TabCur].id);
+					// #endif
+				}
+				
+				
 			},
 			sortTabSelect(e){
 				this.SortTabCur = e.currentTarget.dataset.id;
-				
+				this.cur = 0;
+				this.shopList = [];
+				if(this.SortTabCur == 0){
+					this.loadViewCountList(this.twoClass[this.TabCur].id)
+				}else{
+					// #ifndef H5
+					this.loadNearbyList(this.twoClass[this.TabCur].id);
+					// #endif
+				}
 				//this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
 			},
 			scroll: function(e) {
@@ -144,7 +162,31 @@
 							that.TabCur = index;
 						}
 					});
-					that.loadNearbyList(twoId)
+					that.cur = 0;
+					that.shopList = []
+					if(this.SortTabCur == 0){
+						that.loadViewCountList(twoId)
+					}else{
+						// #ifndef H5
+						that.loadNearbyList(twoId)
+						// #endif
+					}
+					
+				}).catch(err => {
+					console.log(err);
+				})
+			},
+			loadViewCountList(twoid){
+				var that = this;
+				that.isLoad = true;
+				var regionId = this.location.cityCode;
+				regionId = regionId.substring(0,regionId.length-2)
+				var params = {twoClassid: twoid,regionId:regionId}
+				var size = that.size;
+				that.cur = that.cur+1;
+				getViewCountShop(that.cur, size, params).then(res => {
+					that.shopList = that.shopList.concat(res.data.records);
+					that.isLoad = false
 				}).catch(err => {
 					console.log(err);
 				})
@@ -154,8 +196,6 @@
 				// #ifndef H5
 				uni.getLocation({
 					success: function (res) {
-						console.log('当前位置的经度：' + res.longitude);
-						console.log('当前位置的纬度：' + res.latitude);
 						var params = { location: res.longitude+","+res.latitude, twoClassid: twoid}
 						var size = that.size;
 						that.cur = that.cur+1;

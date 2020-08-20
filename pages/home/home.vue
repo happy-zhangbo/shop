@@ -109,7 +109,7 @@
 </template>
 
 <script>
-	import { getOneList, getTwoList, getRecommendList, index_swiper } from '@/api/content/home'
+	import { getOneList, getTwoList, getRecommendList, index_swiper, getCity } from '@/api/content/home'
 	import website from '@/config/website'
 	export default {
 		data() {
@@ -139,11 +139,29 @@
 		},
 		created() {
 			var that = this;
+			
 			uni.getStorage({
 			    key: 'region',
 			    success: function (res) {
 					that.location = res.data;
-			    }
+			    },
+				fail: function(err){
+					uni.getLocation({
+						success: function (res) {
+							var location = res.longitude+","+res.latitude
+							getCity({location:location}).then(res => {
+								uni.setStorage({
+								    key: 'region',
+								    data: res.data,
+								    success: function () {
+								        that.location = res.data;
+								    }
+								})
+								
+							})
+						}
+					})
+				}
 			});
 			this.loadOneClass();
 		},

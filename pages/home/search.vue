@@ -66,6 +66,7 @@
 <script>
 	//引用mSearch组件，如不需要删除即可
 	import mSearch from '@/components/mehaotian-search-revision/mehaotian-search-revision.vue';
+	import { getSuggest } from '@/api/content/home'
 	export default {
 		components: {
 			//引用mSearch组件，如不需要删除即可
@@ -113,10 +114,11 @@
 			//加载热门搜索
 			loadHotKeyword() {
 				//定义热门搜索关键字，可以自己实现ajax请求数据再赋值
-				this.hotKeywordList = ['键盘', '鼠标', '显示器', '电脑主机', '蓝牙音箱', '笔记本电脑', '鼠标垫', 'USB', 'USB3.0'];
+				this.hotKeywordList = ['龙骨', '建材', '装饰', '设计'];
 			}, 
 			//监听输入
 			inputChange(event) {
+				var that = this;
 				//兼容引入组件时传入参数情况
 				var keyword = event.detail?event.detail.value:event;
 				if (!keyword) {
@@ -126,14 +128,23 @@
 				}
 				this.isShowKeywordList = true;
 				//以下示例截取淘宝的关键字，请替换成你的接口
-				uni.request({
-					url: 'https://suggest.taobao.com/sug?code=utf-8&q=' + keyword, //仅为示例
-					success: (res) => {
-						this.keywordList = [];
-						this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
+				// uni.request({
+				// 	url: 'https://suggest.taobao.com/sug?code=utf-8&q=' + keyword, //仅为示例
+				// 	success: (res) => {
+				// 		this.keywordList = [];
+				// 		this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
 						
-					}
-				});
+				// 	}
+				// });
+				getSuggest({keyword:keyword}).then(res => {
+					that.keywordList = [];
+					that.keywordList = that.drawCorrelativeKeyword(res.data, keyword);
+				}).catch(err => {
+					console.log(err);
+					console.log("补全查询失败");
+				})
+				
+				
 			},
 			//高亮关键字
 			drawCorrelativeKeyword(keywords, keyword) {
@@ -142,10 +153,10 @@
 				for (var i = 0; i < len; i++) {
 					var row = keywords[i];
 					//定义高亮#9f9f9f
-					var html = row[0].replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
+					var html = row.replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
 					html = '<div>' + html + '</div>';
 					var tmpObj = {
-						keyword: row[0],
+						keyword: row,
 						htmlStr: html
 					};
 					keywordArr.push(tmpObj)

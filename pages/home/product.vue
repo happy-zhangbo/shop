@@ -112,7 +112,6 @@
 		onLoad(e) {
 			var that = this;
 			commdity(e.id).then(res => {
-				console.log(res);
 				that.commdity = res.data;
 			}).catch(err => {
 				console.log(err)

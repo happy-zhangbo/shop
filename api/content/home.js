@@ -83,6 +83,18 @@ export const getNearbyList = (current,size,params) => {
 	})
 }
 
+export const getViewCountShop = (current,size,params) => {
+	return request({
+		url: 'web/home/view_count_shop',
+		method: 'get',
+		params: {
+		  ...params,
+		  current,
+		  size
+		}
+	})
+}
+
 export const getSearchResult = (keyword) => {
 	return request({
 		url: 'web/home/search',
@@ -93,3 +105,22 @@ export const getSearchResult = (keyword) => {
 	})
 }
 
+export const getSuggest = (keyword) => {
+	return request({
+		url: 'web/home/suggest',
+		method: 'get',
+		params: {
+		  ...keyword
+		}
+	})
+}
+
+export const getCity = (location) => {
+	return request({
+		url: 'web/home/location',
+		method: 'get',
+		params: {
+		  ...location
+		}
+	})
+}
