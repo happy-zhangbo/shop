@@ -133,7 +133,11 @@
 				list[i].id = i;
 			}
 			this.list = list;
-			this.listCur = list[0];
+			this.listCur = list[10];
+			
+			this.tabCur = 10;
+			this.mainCur = 10;
+			this.verticalNavTop = (10 - 1) * 50
 		},
 		onReady() {
 			uni.hideLoading()

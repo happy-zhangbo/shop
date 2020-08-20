@@ -210,8 +210,9 @@
 			},
 			toShopList(twoId){
 				var one_id = this.oneClass[this.TabCur].id
+				var one_name = this.oneClass[this.TabCur].name
 				uni.navigateTo({
-					url:"/pages/home/shop-list?oneId="+one_id+"&twoId="+twoId
+					url:"/pages/home/shop-list?oneName="+one_name+"&oneId="+one_id+"&twoId="+twoId
 				})
 			},
 			loadOneClass(){
@@ -235,6 +236,10 @@
 			},
 			loadRecommend(id){
 				var that = this;
+				uni.showLoading({
+					title: '加载中...',
+					mask: true
+				});
 				that.isLoad = true;
 				var regionId = this.location.cityCode;
 				regionId = regionId.substring(0,regionId.length-2)
@@ -243,6 +248,7 @@
 				getRecommendList(this.cur, size, {oneClassid:id,regionId:regionId}).then(res => {
 					that.shopList = that.shopList.concat(res.data.records);
 					that.isLoad = false
+					uni.hideLoading()
 				}).catch(err => {
 					console.log(err);
 				})

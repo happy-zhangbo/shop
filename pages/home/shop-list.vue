@@ -2,7 +2,7 @@
 	<view>
 		<!-- 头部 -->
 		<cu-custom bgImage="https://image.weilanwl.com/color2.0/plugin/sylb2244.jpg" :isBack="true"><block slot="backText">返回</block>
-			<block slot="content">一级分类名称</block>
+			<block slot="content">{{ oneName }}</block>
 			<block slot="right">
 				<!-- <view @tap="toRegion" class="padding-lr">
 					{{ location.title }}<text class="cuIcon-unfold" style="font-size: 15px;margin-left: 2px;"></text>
@@ -38,6 +38,7 @@
 						<view class="flex-treble">
 							<view class="text-bold margin-bottom-sm text-cut" style="width: 350upx;">{{ item.name }}</view>
 							<view class="margin-bottom-sm text-sm text-grey text-light">{{ item.shopInfo }}</view>
+							<view class="text-sm text-grey text-light">浏览人数：{{ item.viewCount }}</view>
 						</view>
 						<view class="flex-treble text-right">
 							<block  v-if="SortTabCur == 1">
@@ -88,6 +89,7 @@
 				},
 				size: 10,
 				cur: 0,
+				oneName: ""
 			}
 		},
 		onLoad(e){
@@ -102,6 +104,7 @@
 					that.location = res.data;
 			    }
 			});
+			that.oneName = e.oneName;
 			that.loadTwoClass(e.oneId,e.twoId);
 			
 			
@@ -177,6 +180,10 @@
 				})
 			},
 			loadViewCountList(twoid){
+				uni.showLoading({
+					title: '加载中...',
+					mask: true
+				});
 				var that = this;
 				that.isLoad = true;
 				var regionId = this.location.cityCode;
@@ -187,13 +194,17 @@
 				getViewCountShop(that.cur, size, params).then(res => {
 					that.shopList = that.shopList.concat(res.data.records);
 					that.isLoad = false
+					uni.hideLoading()
 				}).catch(err => {
 					console.log(err);
 				})
 			},
 			loadNearbyList(twoid){
 				var that = this;
-				// #ifndef H5
+				uni.showLoading({
+					title: '加载中...',
+					mask: true
+				});
 				uni.getLocation({
 					success: function (res) {
 						var params = { location: res.longitude+","+res.latitude, twoClassid: twoid}
@@ -203,12 +214,12 @@
 						getNearbyList(that.cur, size, params).then(res => {
 							that.shopList = that.shopList.concat(res.data.records);
 							that.isLoad = false
+							uni.hideLoading()
 						}).catch(err => {
 							console.log(err);
 						})
 					}
 				})
-				// #endif
 			}
 		}
 	}

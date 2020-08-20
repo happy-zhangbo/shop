@@ -44,29 +44,55 @@
 					{{ item.name }}
 				</view>
 			</scroll-view>
+			
+			
+			
 			<scroll-view class="VerticalMain" scroll-y scroll-with-animation style="height:calc(100vh - 375upx)"
 			 :scroll-into-view="'main-'+mainCur" @scroll="VerticalMain">
-				<view class="padding-top padding-lr" v-for="(item,index) in listType" :key="index" :id="'main-'+index">
+				<view class="padding-top-sm padding-lr-sm text-light text-sm" v-if="searchResult !== null && searchResult !== undefined">
 					<view class="cu-bar solid-bottom bg-white">
 						<view class="action">
-							<text class="cuIcon-title text-red"></text> {{ item.name }}</view>
+							<text class="cuIcon-title text-red"></text> 搜索商品
+						</view>
+						<view class="action" @tap="searchResult = null">
+							关闭
+						</view>
 					</view>
-					
+					<view class="bg-white flex padding-sm" @tap="toProduct(searchResult.id)">
+						<view class="cu-avatar xl" :style="{backgroundImage:'url('+website.imgHome+searchResult.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
+						<view class="margin-left" style="width: 100%;">
+							<view class="text-bold margin-bottom-sm">{{ searchResult.title }}</view>
+							<view class="text-gray text-sm margin-bottom-sm">{{ searchResult.desc }}</view>
+							<view class="text-red text-xl flex justify-between">
+								<view><text class="text-sm">￥</text>{{ searchResult.specifList[0].price }}</view>
+								<view>
+									<button class="cu-btn round sm bg-black" @tap.stop="show_specs(searchResult.specifList)">查看规格</button>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="padding-top-sm padding-lr-sm" v-for="(item,index) in listType" :key="index" :id="'main-'+index">
+					<view class="cu-bar solid-bottom bg-white">
+						<view class="action">
+							<text class="cuIcon-title text-red"></text> {{ item.name }}
+						</view>
+					</view>
 					<view class="cu-list">
-						<view class="bg-white padding" v-if="item.commodityVOList.length <= 0">
+						<view class="bg-white padding-sm" v-if="item.commodityVOList.length <= 0">
 							<view class="text-light text-center text-sm text-gray">
 								这个分类下没有商品
 							</view>
 						</view>
-						<view class="bg-white flex padding" v-for="(item,index) in item.commodityVOList" :key="index" @tap="toProduct(item.id)">
-							<view class="cu-avatar xl" :style="{backgroundImage:'url('+website.imgHome+item.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
+						<view class="bg-white flex padding-sm" v-for="(commodity,commodityIndex) in item.commodityVOList" :key="commodityIndex" @tap="toProduct(commodity.id)">
+							<view class="cu-avatar xl" :style="{backgroundImage:'url('+website.imgHome+commodity.cover+')'}" style="border-radius: 5px; width: 50%;"></view>
 							<view class="margin-left" style="width: 100%;">
-								<view class="text-bold margin-bottom-sm">{{ item.title }}</view>
-								<view class="text-gray text-sm margin-bottom-sm">{{ item.desc }}</view>
+								<view class="text-bold margin-bottom-sm">{{ commodity.title }}</view>
+								<view class="text-gray text-sm margin-bottom-sm">{{ commodity.desc }}</view>
 								<view class="text-red text-xl flex justify-between">
-									<view><text class="text-sm">￥</text>{{ item.specifList[0].price }}</view>
+									<view><text class="text-sm">￥</text>{{ commodity.specifList[0].price }}</view>
 									<view>
-										<button class="cu-btn round sm bg-black" @tap.stop="show_specs(item.specifList)">查看规格</button>
+										<button class="cu-btn round sm bg-black" @tap.stop="show_specs(commodity.specifList)">查看规格</button>
 									</view>
 								</view>
 							</view>
@@ -85,7 +111,6 @@
 							<view class="margin-lr-sm" v-for="(item,index) in shopCoverArrayImg" :key="index">
 								<image style="height: 100px;border-radius: 3px;" :src="website.imgHome+item" mode="aspectFit"></image>
 							</view>
-
 						</view>
 					</view>
 				</view>
@@ -169,11 +194,13 @@
 					"名称",
 					"名称",
 					"名称"
-				]
+				],
+				searchResult:null
 			}
 		},
 		
 		onLoad(e) {
+			console.log(e);
 			uni.showLoading({
 				title: '加载中...',
 				mask: true
@@ -182,6 +209,20 @@
 			inShop(e.id).then(res =>{
 				that.shopInfo = res.data;
 				that.listType = res.data.categoriesVOList;
+				if(e.typeid !== null && e.typeid !== undefined){
+					that.listType.forEach(function(item,i){
+						if(item.id === e.typeid){
+							item.commodityVOList.forEach(function(commodity,index){
+								if(commodity.id === e.cid){
+									that.searchResult = commodity
+								}
+							})
+						}
+					});
+					console.log(that.searchResult)
+				}
+				
+				
 			}).catch(err => {
 				console.log(err);
 			})
@@ -237,8 +278,8 @@
 				let scrollTop = e.detail.scrollTop + 10;
 				for (let i = 0; i < this.listType.length; i++) {
 					if (scrollTop > this.listType[i].top && scrollTop < this.listType[i].bottom) {
-						this.verticalNavTop = (this.listType[i].id - 1) * 50
-						this.typeTabCur = this.listType[i].id
+						this.verticalNavTop = (i - 1) * 50
+						this.typeTabCur = i
 						return false
 					}
 				}

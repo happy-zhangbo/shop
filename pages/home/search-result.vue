@@ -11,7 +11,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-card" v-for="(item,index) in result" :key="index" @tap="toShop">
+		<view class="cu-card" v-for="(item,index) in result" :key="index" @tap="toShop(item.id)">
 			<view class="cu-item padding">
 				<view class="flex">
 					<view class="basis-xs">
@@ -31,7 +31,7 @@
 				</view>
 				<view>
 					<scroll-view class="scroll-view_H" enable-flex scroll-x="true" @scroll="scroll" scroll-left="0">
-						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index"  @tap="toShop(1)">
+						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap="toShopAndCommodity">
 							<image :src="website.imgHome+commodity.cover" mode="aspectFill"></image>
 							<view class="text-sm">
 								<rich-text :nodes="commodity.title"></rich-text>
@@ -84,11 +84,19 @@
 			scroll: function(e) {
 				this.old.scrollTop = e.detail.scrollTop
 			},
-			toShop(){
+			toShop(id){
 				uni.navigateTo({
-					url:"/pages/home/shop"
+					url:"/pages/home/shop?id="+id
 				})
 			},
+			toShopAndCommodity(e){
+				var id = e.currentTarget.dataset.id;
+				var cid = e.currentTarget.dataset.cid;
+				var typeid = e.currentTarget.dataset.typeid;
+				uni.navigateTo({
+					url:"/pages/home/shop?id="+id+"&cid="+cid+"&typeid="+typeid
+				})
+			}
 		}
 	}
 </script>
