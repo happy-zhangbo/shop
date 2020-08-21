@@ -1,9 +1,8 @@
 <template>
 	<view>
 		<!-- 头部 -->
-		<view class="padding bg-gradual-pink top" :style="[{paddingTop:StatusBar+20+'px'}]">
+		<view class="padding bg-black top" :style="[{paddingTop:StatusBar+20+'px'}]">
 			<!-- 搜索-->
-			
 			<view class="cu-bar search">
 				<!-- <view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big114004.jpg);"></view> -->
 				<view class="action"  @tap="toRegion">

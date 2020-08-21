@@ -31,7 +31,7 @@
 				</view>
 				<view>
 					<scroll-view class="scroll-view_H" enable-flex scroll-x="true" @scroll="scroll" scroll-left="0">
-						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap="toShopAndCommodity">
+						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap.stop="toShopAndCommodity">
 							<image :src="website.imgHome+commodity.cover" mode="aspectFill"></image>
 							<view class="text-sm">
 								<rich-text :nodes="commodity.title"></rich-text>

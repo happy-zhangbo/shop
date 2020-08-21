@@ -15,8 +15,8 @@ Vue.component('plugin',plugin)
 import home from './pages/home/home.vue'
 Vue.component('home',home)
 
-import shop from './pages/shop/shop.vue'
-Vue.component('shop',shop)
+import worker from './pages/worker/home.vue'
+Vue.component('worker',worker)
 
 import cuCustom from './colorui/components/cu-custom.vue'
 Vue.component('cu-custom',cuCustom)
