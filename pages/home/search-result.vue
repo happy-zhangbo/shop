@@ -18,7 +18,9 @@
 						<image class="cu-avatar round lg" :src="website.imgHome+item.cover" mode="aspectFill"></image>
 					</view>
 					<view class="basis-xl padding-lr-sm">
-						<view class="text-bold text-lg text-black margin-bottom-sm">{{ item.name }}</view>
+						<view class="text-bold text-lg text-black margin-bottom-sm">
+							<rich-text :nodes="item.name"></rich-text>
+						</view>
 						
 						<view class="flex justify-between">
 							<view class="margin-bottom-sm text-gray text-light">{{ item.shopInfo }}</view>
@@ -31,7 +33,7 @@
 				</view>
 				<view>
 					<scroll-view class="scroll-view_H" enable-flex scroll-x="true" @scroll="scroll" scroll-left="0">
-						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap.stop="toShopAndCommodity">
+						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList.slice(0,8)" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap.stop="toShopAndCommodity">
 							<image :src="website.imgHome+commodity.cover" mode="aspectFill"></image>
 							<view class="text-sm">
 								<rich-text :nodes="commodity.title"></rich-text>
