@@ -23,7 +23,7 @@
 						</view>
 					</view>
 				</view>
-				<view class="text-df">{{ shopInfo.shopInfo }}{{ shopInfo.shopInfo }}</view>
+				<view class="text-df">{{ shopInfo.shopInfo }}</view>
 			</view>
 		</view>
 		<!-- <swiper class="screen-swiper round-dot" :indicator-dots="true" :circular="true" :autoplay="true" interval="5000"
@@ -52,7 +52,8 @@
 				<view class="padding-top-sm padding-lr-sm text-light text-sm" v-if="searchResult !== null && searchResult !== undefined">
 					<view class="cu-bar solid-bottom bg-white">
 						<view class="action">
-							<text class="cuIcon-title text-red"></text> 搜索商品
+							<!-- <text class="cuIcon-title text-red"></text> -->
+							搜索商品
 						</view>
 						<view class="action" @tap="searchResult = null">
 							关闭
@@ -75,7 +76,8 @@
 				<view class="padding-top-sm padding-lr-sm" v-for="(item,index) in listType" :key="index" :id="'main-'+index">
 					<view class="cu-bar solid-bottom bg-white">
 						<view class="action">
-							<text class="cuIcon-title text-red"></text> {{ item.name }}
+							<!-- <text class="cuIcon-title text-red"></text> -->
+							{{ item.name }}
 						</view>
 					</view>
 					<view class="cu-list">
@@ -120,12 +122,12 @@
 						<text class="text-black text-light">店铺公告：{{ shopInfo.announcement}}</text>
 					</view>
 				</view>
-				<view class="cu-item">
+				<!-- <view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-time text-black text-light"></text>
 						<text class="text-black text-light">店铺介绍：{{ shopInfo.shopInfo}}</text>
 					</view>
-				</view>
+				</view> -->
 				<view class="cu-item">
 					<view class="content">
 						<text class="cuIcon-time text-black text-light"></text>
@@ -139,6 +141,9 @@
 					</view>
 				</view>
 			</view>
+		</view>
+		<view v-if="tabTopCur == 2">
+			评论信息
 		</view>
 		<view class="cu-modal" :class="showSpecsModel?'show':''">
 			<view class="cu-dialog">
@@ -175,7 +180,7 @@
 		data() {
 			return {
 				website: website,
-				tabTop: ["商品","店铺信息"],
+				tabTop: ["商品","店铺","评论"],
 				tabTopCur: 0,
 				scrollLeft: 0,
 				listType: [],

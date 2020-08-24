@@ -75,9 +75,10 @@
 					</view>
 				</view>
 			</view>
-			<view class="margin-top-xl text-light"  v-if="shopList.length <= 0">
-				<view class="text-center">暂时还没有商铺加盟</view>
-				<view class="text-center">欢迎致电<text class="text-red">18010091016</text>咨询</view>
+			<view class="margin-top-xl text-gray text-center text-light"  v-if="shopList.length <= 0">
+				<view class="">您所在的地区或者当前分类下</view>
+				<view class="">暂时还没有商户入驻</view>
+				<view class="">欢迎致电<text class="text-red"> 18010091016 </text>咨询</view>
 			</view>
 			<view class="grid col-2">	
 				<view v-for="(item,index) in shopList" :key="index" @tap="toShop(item.id)" >
@@ -97,9 +98,9 @@
 					</view>
 				</view>	
 			</view>
-			<view class="text-gray text-light text-center margin-xl">
-				<view class="cu-load load-cuIcon loading" v-if="isLoad">数据加载中，请稍后</view>
-				<view class="" v-else @tap="loadRecommend(oneClass[TabCur].id)">点击加载更多</view>
+			<view class="text-gray text-light text-center margin-xl" v-if="shopList.length > 0">
+				<view class="cu-load load-cuIcon loading" v-show="isLoad">数据加载中，请稍后</view>
+				<view class="" v-show="!isLoad" @tap="loadRecommend(oneClass[TabCur].id)">点击加载更多</view>
 			</view>
 			
 		</view>

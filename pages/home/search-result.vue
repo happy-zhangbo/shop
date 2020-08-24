@@ -46,8 +46,13 @@
 				</view>
 			</view>
 		</view>
+		
 		<view class="text-center margin-top-xl text-gray">
-			对不起，没有搜索到您想要的商品
+			<view>对不起，没有搜索到您想要的商品，</view>
+			<view>可能有以下原因：</view>
+			
+				<view>1.您所在的地区暂未开通</view>
+				<view>2.您需要的商品，暂未加盟</view>
 		</view>
 	</view>
 </template>
