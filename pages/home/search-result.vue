@@ -33,7 +33,7 @@
 				</view>
 				<view>
 					<scroll-view class="scroll-view_H" enable-flex scroll-x="true" @scroll="scroll" scroll-left="0">
-						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList.slice(0,8)" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap.stop="toShopAndCommodity">
+						<view class="scroll-view-item_H margin-sm text-light" v-for="(commodity,index) in item.commodityVOList" :key="index" :data-id="item.id" :data-cid="commodity.id" :data-typeid="commodity.categoriesId" @tap.stop="toShopAndCommodity">
 							<image :src="website.imgHome+commodity.cover" mode="aspectFill"></image>
 							<view class="text-sm">
 								<rich-text :nodes="commodity.title"></rich-text>
@@ -47,12 +47,11 @@
 			</view>
 		</view>
 		
-		<view class="text-center margin-top-xl text-gray">
+		<view class="text-center margin-top-xl text-gray" v-if="result.length <= 0">
 			<view>对不起，没有搜索到您想要的商品，</view>
 			<view>可能有以下原因：</view>
-			
-				<view>1.您所在的地区暂未开通</view>
-				<view>2.您需要的商品，暂未加盟</view>
+			<view>1.您所在的地区暂未开通</view>
+			<view>2.您需要的商品，暂未加盟</view>
 		</view>
 	</view>
 </template>

@@ -3,6 +3,9 @@
 		<!-- 头部 -->
 		<view class="padding bg-black top" :style="[{paddingTop:StatusBar+20+'px'}]">
 			<!-- 搜索-->
+			<!-- #ifdef MP-WEIXIN -->
+			<view class="text-light text-lg text-center">材料</view>
+			<!-- #endif -->
 			<view class="cu-bar search">
 				<!-- <view class="cu-avatar round" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big114004.jpg);"></view> -->
 				<view class="action"  @tap="toRegion">
@@ -13,7 +16,6 @@
 					<text class="cuIcon-search"></text>
 					<input :adjust-position="false" type="text" placeholder="搜索商品关键词" confirm-type="search"></input>
 				</view>
-				
 			</view>
 			<!-- 一级分类-->
 			<!-- <scroll-view scroll-x class="nav" scroll-with-animation :scroll-left="scrollLeft">
